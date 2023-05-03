@@ -1,0 +1,96 @@
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is XX
+Server version: 8.0.33 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2023, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> CREATE DATABASE chicago;
+Query OK, 1 row affected (0.11 sec)
+
+mysql> USE chicago;
+Database changed
+
+mysql> CREATE TABLE chicago_census (community_area_number SMALLINT, community_area_name VARCHAR(24), percent_of_housing_crowded DECIMAL (3,1), percent_households_below_poverty DECIMAL (3,1), percent_aged_16__unemployed DECIMAL (3,1), percent_aged_25__without_high_school_diploma DECIMAL (3,1), percent_aged_under_18_or_over_64 DECIMAL (3,1), per_capita_income MEDIUMINT, hardship_index TINYINT, PRIMARY KEY (community_area_number));
+Query OK, 0 rows affected (0.16 sec)
+
+mysql> DESCRIBE chicago_census;
++----------------------------------------------+--------------+------+-----+---------+-------+
+| Field                                        | Type         | Null | Key | Default | Extra |
++----------------------------------------------+--------------+------+-----+---------+-------+
+| community_area_number                        | smallint     | NO   | PRI | NULL    |       |
+| community_area_name                          | varchar(24)  | YES  |     | NULL    |       |
+| percent_of_housing_crowded                   | decimal(3,1) | YES  |     | NULL    |       |
+| percent_households_below_poverty             | decimal(3,1) | YES  |     | NULL    |       |
+| percent_aged_16__unemployed                  | decimal(3,1) | YES  |     | NULL    |       |
+| percent_aged_25__without_high_school_diploma | decimal(3,1) | YES  |     | NULL    |       |
+| percent_aged_under_18_or_over_64             | decimal(3,1) | YES  |     | NULL    |       |
+| per_capita_income                            | mediumint    | YES  |     | NULL    |       |
+| hardship_index                               | tinyint      | YES  |     | NULL    |       |
++----------------------------------------------+--------------+------+-----+---------+-------+
+9 rows in set (0.01 sec)
+
+mysql> LOAD DATA INFILE 'file location'
+    -> INTO TABLE chicago_census
+    -> FIELDS TERMINATED BY ';'
+    -> LINES TERMINATED BY '\r\n'
+    -> IGNORE 1 rows;
+Query OK, 77 rows affected (0.09 sec)
+Records: 77  Deleted: 0  Skipped: 0  Warnings: 0
+
+mysql> CREATE TABLE chicago_school (school_id MEDIUMINT, name_of_school VARCHAR (70), elementary_middle_high CHAR(2), street_address VARCHAR(30), city CHAR(7), state CHAR(2), zip_code MEDIUMINT, phone_number CHAR(15), link CHAR(80), network_manager VARCHAR(41), collaborative_name VARCHAR(35), adequate_yearly_progress_made_ VARCHAR(3), track_schedule VARCHAR(10), cps_performance_policy_status VARCHAR(17), cps_performance_policy_level VARCHAR(16), healthy_school_certified VARCHAR(3), safety_icon VARCHAR(13), safety_score TINYINT, family_involvement_icon VARCHAR(13), family_involvement_score TINYINT, environment_icon VARCHAR(13), environment_score TINYINT, instruction_icon VARCHAR(13), instruction_score TINYINT, leaders_icon VARCHAR(13), leaders_score TINYINT, teachers_icon VARCHAR(13), teachers_score TINYINT, parent_engagement_icon VARCHAR(13), parent_engagement_score TINYINT, parent_environment_icon VARCHAR(13), parent_environment_score TINYINT, average_student_attence DECIMAL(4,1), rate_of_misconducts__per_100_students_ DECIMAL(4,1), average_teacher_attence DECIMAL(4,1), individualized_education_program_compliance_rate DECIMAL(4,1), pk_2_literacy__ DECIMAL(4,1), pk_2_math__ DECIMAL(4,1), gr3_5_grade_level_math__ DECIMAL(4,1), gr3_5_grade_level_read__ DECIMAL(4,1), gr3_5_keep_pace_read__ DECIMAL(4,1), gr3_5_keep_pace_math__ DECIMAL(4,1), gr6_8_grade_level_math__ DECIMAL(4,1), gr6_8_grade_level_read__ DECIMAL(4,1), gr6_8_keep_pace_math_ DECIMAL(4,1), gr6_8_keep_pace_read__ DECIMAL(4,1), gr_8_explore_math__ DECIMAL(4,1), gr_8_explore_read__ DECIMAL(4,1), isat_exceeding_math__ DECIMAL(4,1), isat_exceeding_reading__ DECIMAL(4,1), isat_value_add_math DECIMAL(3,1), isat_value_add_read DECIMAL(4,1), isat_value_add_color_math VARCHAR(7), isat_value_add_color_read VARCHAR(7), students_taking__algebra__ DECIMAL(4,1), students_passing__algebra__ DECIMAL(4,1), 9_grade_explore_2009 DECIMAL(4,1), 9_grade_explore_2010 DECIMAL(4,1), 10_grade_plan_2009 DECIMAL(4,1), 10_grade_plan_2010 DECIMAL(4,1), net_change_explore_and_plan DECIMAL(4,1), 11_grade_average_act DECIMAL(4,1), net_change_plan_and_act DECIMAL(4,1), college_eligibility__ DECIMAL(4,1), graduation_rate__ DECIMAL(4,1), college_enrollment_rate__ DECIMAL(4,1), college_enrollment SMALLINT, general_services_route TINYINT, freshman_on_track_rate__ TINYINT, x_coordinate DECIMAL(11,3), y_coordinate DECIMAL(11,3), latitude DECIMAL(11,8), longitude DECIMAL(11,8), community_area_number TINYINT, community_area_name VARCHAR(23), ward TINYINT, police_district TINYINT, PRIMARY KEY (school_id));
+Query OK, 0 rows affected (0.44 sec)
+
+mysql> LOAD DATA INFILE 'file location'
+    -> INTO TABLE chicago_school
+    -> FIELDS TERMINATED BY ';'
+    -> LINES TERMINATED BY '\r\n'
+    -> IGNORE 1 rows;
+Query OK, 566 rows affected (1.30 sec)
+Records: 566  Deleted: 0  Skipped: 0  Warnings: 0
+
+mysql> CREATE TABLE chicago_crime (id INT, case_number VARCHAR(9), date DATE, block VARCHAR(36), iucr VARCHAR(6), primary_type VARCHAR(34), description VARCHAR(47), location_description VARCHAR(34), arrest BOOL, domestic BOOL, beat SMALLINT, district TINYINT, ward TINYINT, community_area_number TINYINT, fbicode VARCHAR(4), x_coordinate INT, y_coordinate INT, year SMALLINT, latitude DECIMAL(11,8), longitude DECIMAL(11,8));
+Query OK, 0 rows affected (0.16 sec)
+
+mysql> LOAD DATA INFILE 'file location'
+    -> INTO TABLE chicago_crime
+    -> FIELDS TERMINATED BY ';'
+    -> LINES TERMINATED BY '\r\n'
+    -> IGNORE 1 rows;
+Query OK, 533 rows affected (0.21 sec)
+Records: 533  Deleted: 0  Skipped: 0  Warnings: 0
+
+# Exact file location not shown. Remember to save the .csv file in the Uploads folder of MySQL Server 8.0, to avoid the "The MySQL server is running with the --secure-file-priv option so it cannot execute this statement" error.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
