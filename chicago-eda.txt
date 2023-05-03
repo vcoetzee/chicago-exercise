@@ -1,0 +1,130 @@
+# Find the total number of crimes recorded in the chicago_crime table
+mysql> SELECT COUNT(*) FROM chicago_crime;
++----------+
+| COUNT(*) |
++----------+
+|      533 |
++----------+
+1 row in set (0.20 sec)
+
+# List community areas with per capita income less than 11 000.
+mysql> SELECT community_area_name FROM chicago_census WHERE per_capita_income < 11000;
++---------------------+
+| community_area_name |
++---------------------+
+| West Garfield Park  |
+| South Lawndale      |
+| Fuller Park         |
+| Riverdale           |
++---------------------+
+4 rows in set (0.02 sec)
+
+#List all case numbers for crimes involving minors
+mysql> SELECT case_number FROM chicago_crime WHERE description LIKE '%minor%';
++-------------+
+| case_number |
++-------------+
+| HL266884    |
+| HK238408    |
++-------------+
+2 rows in set (0.06 sec)
+
+#List all kidnapping crimes involving a child
+mysql> SELECT case_number, primary_type
+    -> FROM chicago_crime
+    -> WHERE DESCRIPTION='CHILD ABDUCTION/STRANGER';
++-------------+--------------+
+| case_number | primary_type |
++-------------+--------------+
+| HN144152    | KIDNAPPING   |
++-------------+--------------+
+1 row in set (0.02 sec)
+
+#What kinds of crimes were recorded at schools?
+mysql> SELECT primary_type, location_description
+    -> FROM chicago_crime
+    -> WHERE location_description
+    -> LIKE '%SCHOOL%';
++------------------------+---------------------------+
+| primary_type           | location_description      |
++------------------------+---------------------------+
+| BATTERY                | SCHOOL, PUBLIC, GROUNDS   |
+| BATTERY                | SCHOOL, PUBLIC, BUILDING  |
+| BATTERY                | SCHOOL, PUBLIC, BUILDING  |
+| BATTERY                | SCHOOL, PUBLIC, BUILDING  |
+| BATTERY                | SCHOOL, PUBLIC, GROUNDS   |
+| CRIMINAL DAMAGE        | SCHOOL, PUBLIC, GROUNDS   |
+| NARCOTICS              | SCHOOL, PUBLIC, GROUNDS   |
+| NARCOTICS              | SCHOOL, PUBLIC, BUILDING  |
+| ASSAULT                | SCHOOL, PUBLIC, GROUNDS   |
+| CRIMINAL TRESPASS      | SCHOOL, PUBLIC, GROUNDS   |
+| PUBLIC PEACE VIOLATION | SCHOOL, PRIVATE, BUILDING |
+| PUBLIC PEACE VIOLATION | SCHOOL, PUBLIC, BUILDING  |
++------------------------+---------------------------+
+12 rows in set (0.00 sec)
+
+#List the average safety score for each type of school
+mysql> SELECT elementary_middle_high, avg(safety_score)
+    -> FROM chicago_school
+    -> GROUP BY elementary_middle_high;
++------------------------+-------------------+
+| elementary_middle_high | avg(safety_score) |
++------------------------+-------------------+
+| HS                     |           49.6235 |
+| ES                     |           49.5204 |
+| MS                     |           48.0000 |
++------------------------+-------------------+
+3 rows in set (0.07 sec)
+
+#List 5 community areas with the highest % of households below the poverty line
+mysql> SELECT community_area_name, avg(percent_households_below_poverty)
+    -> FROM chicago_census
+    -> GROUP BY community_area_name
+    -> ORDER BY avg(percent_households_below_poverty) DESC
+    -> LIMIT 5;
++---------------------+---------------------------------------+
+| community_area_name | avg(percent_households_below_poverty) |
++---------------------+---------------------------------------+
+| Riverdale           |                              56.50000 |
+| Fuller Park         |                              51.20000 |
+| Englewood           |                              46.60000 |
+| North Lawndale      |                              43.10000 |
+| East Garfield Park  |                              42.40000 |
++---------------------+---------------------------------------+
+5 rows in set (0.00 sec)
+
+#Which community area is the most crime prone?
+mysql> SELECT community_area_number, COUNT(*) AS total_crime
+    -> FROM chicago_crime
+    -> GROUP BY community_area_number
+    -> ORDER BY total_crime DESC
+    -> LIMIT 1;
++-----------------------+-------------+
+| community_area_number | total_crime |
++-----------------------+-------------+
+|                    25 |          43 |
++-----------------------+-------------+
+1 row in set (0.00 sec)
+
+#Which community area has the highest hardship index?
+mysql> SELECT community_area_name, hardship_index
+    -> FROM chicago_census
+    -> ORDER BY hardship_index DESC
+    -> LIMIT 1;
++---------------------+----------------+
+| community_area_name | hardship_index |
++---------------------+----------------+
+| Riverdale           |             98 |
++---------------------+----------------+
+1 row in set (0.00 sec)
+
+#Use a sub query to determine the community area name with the most number of crimes
+mysql> SELECT community_area_name
+    -> FROM chicago_census
+    -> WHERE community_area_number = (SELECT community_area_number FROM chicago_crime GROUP BY community_area_number ORDER BY COUNT(community_area_number) DESC LIMIT 1);
++---------------------+
+| community_area_name |
++---------------------+
+| Austin              |
++---------------------+
+1 row in set (0.10 sec)
