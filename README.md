@@ -1,6 +1,6 @@
 # Chicago Exercise
 
-The aim of this exercise was to further my SQL skills in mySQL. 
+The aim of this exercise was to further my SQL skills in mySQL 8.0 
 
 ## Methods
 
